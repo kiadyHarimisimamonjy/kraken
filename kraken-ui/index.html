@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Kraken ui</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Kraken admin</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto flex-column vertical-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Nouveau Kraken</a>
+      </li>
+      <li class="nav-item">
+       <a class="nav-link" href="list.html">Action Kraken</a>
+      </li>
+  
+     
+      
+    </ul>
+   
+
+  </div>
+</nav>
+<div class="container" ng-app="myApp" ng-controller="myCtrl">
+  <form>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="nom">Nom</label>
+        <input type="text" class="form-control" id="nom" ng-model="nom">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" ng-model="age">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="taille">Taille</label>
+        <input type="number" class="form-control" id="taille" ng-model="taille">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="poids">Poids</label>
+        <input type="number" class="form-control" id="poids" ng-model="poids">
+      </div>
+    </div>
+    <button  ng-click="addKraken()" class="btn btn-primary">Ajout Kraken</button>
+    
+  </form>
+
+  <div class="alert alert-danger" ng-if="message.length>0" role="alert">
+    {{message}}
+  </div>
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script></body>
+<script src="const.js"></script>
+<script>
+  app.controller('myCtrl', function($scope, $http,$window) {
+    $scope.message=''; 
+    $scope.addKraken = function() {
+     
+      $http({
+      method : "POST",
+    data:{"nom":$scope.nom,"age":$scope.age,"taille":$scope.taille,"poids":$scope.poids},
+      url : BASE_URL+"api/kraken/"
+      }).then(function mySuccess(response) {
+        $window.location.href = 'list.html';
+      }, function myError(response) {
+        $scope.message='une erreur est survenue'; 
+      });
+    };
+   
+  });
+  </script>
+</html>

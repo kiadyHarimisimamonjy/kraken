@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Kraken ui</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Kraken admin</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto flex-column vertical-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">Nouveau Kraken</a>
+      </li>
+      <li class="nav-item">
+       <a class="nav-link" href="list.html">Action Kraken</a>
+      </li>
+  
+     
+      
+    </ul>
+   
+
+  </div>
+</nav>
+<div class="container" ng-app="myApp" ng-controller="myCtrl">
+  <table class="table"   ng-if="status==='init'">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Age</th>
+        <th scope="col">Taille</th>
+        <th scope="col">Poids</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="kraken in krakens">
+        <th scope="row">{{kraken.id}}</th>
+        <td>{{kraken.nom}}</td>
+        <td>{{kraken.age}}</td>
+        <td>{{kraken.taille}}</td>
+        <td>{{kraken.poids}}</td>
+        <td scope="row"><button ng-click="info(kraken)" class="btn btn-info">Info</button></td>
+        <td scope="row"><button ng-click="addPouvoir(kraken)" class="btn btn-info">Pouvoir</button></td>
+        <td scope="row"><button ng-click="addTentacule(kraken)" class="btn btn-info">Tentacule</button></td>
+      </tr>
+    
+    </tbody>
+  </table>
+  <div ng-if="status==='info'">
+    <form>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="nom">Nom</label>
+          <input type="text" class="form-control" id="nom" ng-model="data.nom">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="age">Age</label>
+          <input type="number" class="form-control" id="age" ng-model="data.age">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="taille">Taille</label>
+          <input type="number" class="form-control" id="taille" ng-model="data.taille">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="poids">Poids</label>
+          <input type="number" class="form-control" id="poids" ng-model="data.poids">
+        </div>
+      </div>
+    </form>
+  
+
+    
+    <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+    <div class="row">
+      <div class="col-4 ">
+        <ul class="list-group">
+          <li class="list-group-item active">Tentacules</li>
+          <li  ng-repeat="tentacule in data.tentacules" class="list-group-item">{{tentacule.nom}}</li>
+          
+        </ul>
+      </div>
+      <div class="col-4 ">
+        <ul class="list-group">
+          <li class="list-group-item active">Pouvoirs</li>
+          <li  ng-repeat="pouvoir in data.pouvoirs" class="list-group-item">{{pouvoir.nom}}</li>
+         
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <div ng-if="status==='tentacule'">
+   
+    <div class="alert alert-danger" ng-if="message.length>0" role="alert">
+      {{message}}
+    </div> 
+    <br>
+    <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+    <div class="row">
+     
+      <div class="col-6 ">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label for="inputState">Kraken</label>
+              <select id="inputState" class="form-control">
+                <option selected>{{data.nom}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="nom">Nom</label>
+              <input type="text" required class="form-control"  id="nomTentacule">
+            </div>
+            <div class="form-group col-md-4"> 
+          
+              <label for="age">Force</label>
+              <input type="number" required class="form-control" id="FOR">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <label for="taille">Dexterite</label>
+              <input type="number" required class="form-control" id="DEX">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="poids">Constitution</label>
+              <input type="number" required class="form-control"id="CON">
+            </div>
+            <div class="form-group col-md-3">
+              <label for="poids">Vie</label>
+              <input type="number" required class="form-control" id="PV">
+            </div>
+          </div>
+          <button  ng-click="addToListTentacule()" class="btn btn-primary">Add To List</button>
+          <button  ng-click="comitAddTentacule()" class="btn btn-primary">Commit List</button>
+
+        </form>
+      </div>
+      <div class="col-4 ">
+        <ul class="list-group">
+          <li class="list-group-item active">Tentacules</li>
+          <li  ng-repeat=" (key, tentacule) in data.tentacules" class="list-group-item">{{tentacule.nom}}    
+             <button type="button"  
+             ng-click="deleteToListTentacule(key)" 
+             class="btn btn-labeled btn-danger">Supprimer</button></li>
+          
+        </ul>
+      </div>  
+     
+    </div> 
+  </div>
+  <div ng-if="status==='pouvoir'">
+   
+    <div class="alert alert-danger" ng-model="message" ng-if="message.length>0" role="alert">
+      {{message}}
+    </div> 
+    <br>
+    <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+    <div class="row">
+     
+     
+          <div class="col-5 ">
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label for="inputState">Kraken</label>
+              <select id="inputState" class="form-control">
+                <option selected>{{data.nom}}</option>
+              </select>
+            </div>
+          </div>
+          
+        
+          <div class="form-row">
+            <button  ng-click="comitAddPouvoir()" class="btn btn-primary">Commit Pouvoir</button>
+
+          </div>
+        </div>
+        <div class="col-4 ">
+          <div ng-repeat="(key, pouvoir) in allpouvoirs" class="form-check ">
+            <input   id="flexCheckChecked{{key}}" class="form-check-input"
+              type="checkbox"   ng-model="pouvoir.checkAttribut"
+              ng-change="checkMax(pouvoir)"            
+                >
+            <label class="form-check-label"  for="flexCheckChecked{{key}}">
+              {{pouvoir.nom}}
+            </label>
+          </div>
+        </div>
+       
+      
+     
+    </div> 
+  </div>
+
+
+    
+ 
+ 
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="const.js"></script>
+
+<script>
+  app.controller('myCtrl', function($scope, $http,$window) {
+    $scope.test=[];
+    $scope.checkMax = function(pouvoir) { 
+     
+      $scope.message='';
+      console.log($scope.data.pouvoirs);
+      $scope.lengthpouvoirs= false;
+      $scope.validation= true;
+      for(i=0;i<$scope.data.pouvoirs.length;i++){
+        if($scope.data.pouvoirs[i].id==pouvoir.id && i<$scope.data.pouvoirs.length-1){
+        
+          $scope.data.pouvoirs.splice(i,1);
+          break;
+        } 
+        else if($scope.data.pouvoirs[i].id==pouvoir.id && i==$scope.data.pouvoirs.length-1){
+        
+          $scope.lengthpouvoirs= true;
+        break;
+      } 
+        
+      }
+    
+        
+   
+    //  console.log(bool);
+    if(i==$scope.data.pouvoirs.length && $scope.data.pouvoirs.length <$scope.maxPouvoir)
+    {
+      $scope.data.pouvoirs.push(pouvoir);
+      
+   }
+   else if(i==$scope.data.pouvoirs.length && $scope.data.pouvoirs.length >=$scope.maxPouvoir)
+    {
+      $scope.validation= false;
+      $scope.message='moin de pouvoir SVP'; 
+    }
+  
+  }
+   function init(){
+    $http.get(BASE_URL+"api/kraken/")
+    .then(function(response) {
+       $scope.krakens = response.data;
+    });
+    $scope.status='init'
+
+   }
+   $scope.info = function(kraken) {
+    
+    getInfo(kraken);
+      $scope.status='info'
+   }
+   $scope.addTentacule = function(kraken) { 
+    
+    getInfo(kraken)
+      $scope.status='tentacule'
+     
+   }
+   $scope.addPouvoir = function(kraken) { 
+    
+    getInfo(kraken)
+      $scope.status='pouvoir'
+     
+   }
+ function checkAttribut () {
+    for(j=0;j<$scope.allpouvoirs.length;j++){
+        for(i=0;i<$scope.data.pouvoirs.length;i++){      
+            if($scope.data.pouvoirs[i].id==$scope.allpouvoirs[j].id){
+              $scope.allpouvoirs[j].checkAttribut=true;
+            } 
+           }
+      }
+      
+    }
+   $scope.comitAddTentacule = function() { 
+    console.log($scope.data);
+    $http({
+      method : "PATCH",
+      url : BASE_URL+"api/kraken/"+$scope.data.id+"/tentacule",
+      data:$scope.data.tentacules
+      }).then(function mySuccess(response) {
+        $window.location.href = 'list.html';
+      }, function myError(response) {
+        $scope.message='une erreur est survenue'; 
+      });
+   }
+   $scope.comitAddPouvoir = function() { 
+    if($scope.validation){
+    pouvoirstemp=$scope.data.pouvoirs.slice();
+    if($scope.lengthpouvoirs) {
+      
+        pouvoirstemp.splice($scope.data.pouvoirs.length-1,1);
+        
+      } 
+      console.log($scope.data.pouvoirs);
+    $http({
+      method : "PATCH",
+      url : BASE_URL+"api/kraken/"+$scope.data.id+"/pouvoir",
+      data:pouvoirstemp
+      }).then(function mySuccess(response) {
+        console.log(response.data)
+        $window.location.href = 'list.html';
+      }, function myError(response) {
+        $scope.message='une erreur est survenue'; 
+      });
+    }
+    else{
+      $scope.message='ce kraken ne peut avoir que '+$scope.maxPouvoir+' pouvoirs'; 
+    }
+   }
+   
+   function getInfo(kraken){
+    $http({
+      method : "GET",
+      url : BASE_URL+"api/kraken/"+kraken.id
+      }).then(function mySuccess(response) {
+        $scope.data=response.data.info;
+        maxPouvoirtemp =$scope.data.tentacules.length/4;       
+        $scope.maxPouvoir=maxPouvoirtemp;
+        if(maxPouvoirtemp<2) $scope.maxPouvoir=1;
+   
+    $scope.allpouvoirs=response.data.allpouvoirs;
+    checkAttribut ();
+      }, function myError(response) {
+        $scope.message='une erreur est survenue'; 
+      });
+   }
+   
+   $scope.deleteToListTentacule = function(tentacule) {	
+			$scope.data.tentacules.splice(tentacule, 1);
+		}
+  $scope.addToListTentacule=function(){
+    $scope.message='';
+    boolTemp=angular.element('#nomTentacule').val().length>0 &&
+angular.element('#PV').val()>0 &&
+angular.element('#CON').val()>0 &&
+angular.element('#FOR').val()>0 &&
+angular.element('#DEX').val()>0;
+    if(boolTemp){
+          if($scope.data.tentacules.length<8){
+          $scope.tentacule={"nom":angular.element('#nomTentacule').val(),"PV":angular.element('#PV').val(),
+          "CON":angular.element('#CON').val(),"FOR":angular.element('#FOR').val(),
+          "DEX":angular.element('#DEX').val()};
+          $scope.data.tentacules.push(  $scope.tentacule)    
+        }
+        else{
+          $scope.message='un kraken peut avoir au max 8 tentacules'; 
+        }
+    }
+    else{
+          $scope.message='toutes les champs sont obligatoires'; 
+        }
+
+ 
+   }
+   init();
+   $scope.tentacule;
+    });
+  </script>
+</body>
+</html>
